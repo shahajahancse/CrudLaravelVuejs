@@ -67,7 +67,22 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:customers,email,'.$id,
+            'phone' => 'required|numeric',
+            'address' => 'required',
+            'total' => 'required|numeric'
+        ]);
+
+        $customer = Customer::findOrFail($id);
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->phone = $request->phone;
+        $customer->address = $request->address;
+        $customer->total = $request->total;
+        $customer->save();                      //save data 
+        return new CustomerResource($customer);     // save and return
     }
 
     /**
