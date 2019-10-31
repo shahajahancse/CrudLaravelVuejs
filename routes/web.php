@@ -18,4 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/customers', 'CustomerController')->name('customers');
+
+/* used Single Action Controller to view data */
+Route::get('/customers', 'CustomerController')->name('customers');  
+
+
