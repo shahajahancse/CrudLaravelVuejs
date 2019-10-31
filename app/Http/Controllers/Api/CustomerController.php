@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerCollection;
+use App\Http\Resources\CustomerResource;
 use App\Customer;
 
 class CustomerController extends Controller
@@ -16,6 +17,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
+        //return CustomerResource::Collection(Customer::latest()->paginate(10)); 
         return new CustomerCollection(Customer::latest()->paginate(10));
     }
 
@@ -38,7 +40,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        return new CustomerResource(Customer::findOrFail(2));
     }
 
     /**
