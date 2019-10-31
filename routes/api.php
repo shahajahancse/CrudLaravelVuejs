@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 /* here api CustomerController controller define */
-Route::apiResource('/customers', 'CustomerController');
+Route::apiResource('customers', 'CustomerController');
