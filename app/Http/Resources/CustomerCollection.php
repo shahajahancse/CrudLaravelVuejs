@@ -14,6 +14,16 @@ class CustomerCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection->transform(function($customer){
+                return[
+                    'id' => $customer->id,
+                    'name' => $customer->name,
+                    'email' => $customer->email,
+                    'phone' => $customer->phone,
+                    'total' => $customer->total,
+                ];
+            })
+        ];
     }
 }
