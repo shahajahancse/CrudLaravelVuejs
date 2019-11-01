@@ -44,6 +44,7 @@
                 </div>
             </div>
         </div>
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 
@@ -60,12 +61,15 @@
       },
       methods: {
         getData(){  
+          this.$Progress.start()
           axios.get('/api/customers')
           .then(response =>  {
             this.customers = response.data.data
+            this.$Progress.finish()
           })
           .catch(e => {
             console.log(e)
+            this.$Progress.fail()
           })
         },
       }
