@@ -6,6 +6,29 @@
                     <div class="card-header">Customers</div>
 
                     <div class="card-body">
+                      <form action="" class="mb-3">
+                        <div class="row">
+
+                          <div class="col-2">
+                            <strong>Search By : </strong>
+                          </div>
+
+                          <div class="col-3">
+                            <select id="feilds" class="form-control">
+                              <option value="name">Name</option>
+                              <option value="email">Email</option>
+                              <option value="phone">Phone</option>
+                              <option value="address">Address</option>
+                              <option value="total">Total</option>
+                            </select>
+                          </div>
+
+                          <div class="col-7">
+                            <input type="text" class="form-control" placeholder="Search">
+                          </div>
+
+                        </div>
+                      </form>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped">
                                 <thead>
@@ -49,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <!-- <vue-progress-bar></vue-progress-bar> -->
+        <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
 

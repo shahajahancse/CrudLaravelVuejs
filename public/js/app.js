@@ -1893,6 +1893,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -37312,70 +37335,118 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "customer" } }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Customers")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "div",
-              { staticClass: "table-responsive" },
-              [
-                _c(
-                  "table",
-                  {
-                    staticClass:
-                      "table table-hover table-bordered table-striped"
-                  },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.customers, function(customer, index) {
-                        return _c("tr", { key: customer.id }, [
-                          _c("th", { attrs: { scope: "row" } }, [
-                            _vm._v(_vm._s(index + 1))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.name))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.email))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.phone))]),
-                          _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(customer.total))]),
-                          _vm._v(" "),
-                          _vm._m(1, true)
-                        ])
-                      }),
-                      0
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _vm.pagination.last_page > 1
-                  ? _c("pagination", {
-                      attrs: { pagination: _vm.pagination, offset: 5 },
-                      on: {
-                        paginate: function($event) {
-                          return _vm.getData()
+  return _c(
+    "div",
+    { attrs: { id: "customer" } },
+    [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [_vm._v("Customers")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "table-responsive" },
+                [
+                  _c(
+                    "table",
+                    {
+                      staticClass:
+                        "table table-hover table-bordered table-striped"
+                    },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.customers, function(customer, index) {
+                          return _c("tr", { key: customer.id }, [
+                            _c("th", { attrs: { scope: "row" } }, [
+                              _vm._v(_vm._s(index + 1))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(customer.name))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(customer.email))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(customer.phone))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(customer.total))]),
+                            _vm._v(" "),
+                            _vm._m(2, true)
+                          ])
+                        }),
+                        0
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm.pagination.last_page > 1
+                    ? _c("pagination", {
+                        attrs: { pagination: _vm.pagination, offset: 5 },
+                        on: {
+                          paginate: function($event) {
+                            return _vm.getData()
+                          }
                         }
-                      }
-                    })
-                  : _vm._e()
-              ],
-              1
-            )
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
+            ])
           ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("vue-progress-bar")
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("form", { staticClass: "mb-3", attrs: { action: "" } }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-2" }, [
+          _c("strong", [_vm._v("Search By : ")])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-3" }, [
+          _c(
+            "select",
+            { staticClass: "form-control", attrs: { id: "feilds" } },
+            [
+              _c("option", { attrs: { value: "name" } }, [_vm._v("Name")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "email" } }, [_vm._v("Email")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "phone" } }, [_vm._v("Phone")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "address" } }, [
+                _vm._v("Address")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "total" } }, [_vm._v("Total")])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-7" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Search" }
+          })
         ])
       ])
     ])
-  ])
-}
-var staticRenderFns = [
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
