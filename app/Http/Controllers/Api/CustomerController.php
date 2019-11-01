@@ -21,6 +21,15 @@ class CustomerController extends Controller
         return new CustomerCollection(Customer::latest()->paginate(10));
     }
 
+
+    // here search data 
+    public function search($feild, $query)
+    {
+        return new CustomerCollection(Customer::where($feild,'LIKE',"%$query%")->latest()->paginate(10));
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      *

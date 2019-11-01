@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 /* here api CustomerController controller define */
 Route::apiResource('customers', 'CustomerController');
+
+/* used CustomerController to search data in customers table by api controller*/ 
+Route::get('search/customers/{feild}/{query}', 'CustomerController@search'); 

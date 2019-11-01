@@ -19,7 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-/* used Single Action Controller to view data */
-Route::get('/customers', 'CustomerController')->name('customers');  
+/* used Single Action Controller to view data in customers table for api*/
+Route::get('/customers', 'CustomerController')->name('customers'); 
+ 
 
 
