@@ -46,8 +46,25 @@
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+      data(){
+        return{
+          customers: [],
         }
+      },
+      mounted() {
+          console.log('Component mounted.')
+          this.getData();
+      },
+      methods: {
+        getData(){  
+          axios.get('/api/customers')
+          .then(response =>  {
+            this.customers = response.data.data
+          })
+          .catch(e => {
+            console.log(e)
+          })
+        },
+      }
     }
 </script>

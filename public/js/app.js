@@ -1885,8 +1885,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      customers: []
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
+    this.getData();
+  },
+  methods: {
+    getData: function getData() {
+      var _this = this;
+
+      axios.get('/api/customers').then(function (response) {
+        _this.customers = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
   }
 });
 
