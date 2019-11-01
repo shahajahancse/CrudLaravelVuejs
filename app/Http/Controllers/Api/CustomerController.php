@@ -18,7 +18,7 @@ class CustomerController extends Controller
     public function index()
     {
         //return CustomerResource::Collection(Customer::latest()->paginate(10)); 
-        return new CustomerCollection(Customer::latest()->paginate(10));
+        return new CustomerCollection(Customer::orderBy('id', 'DESC')->paginate(10));
     }
 
 
