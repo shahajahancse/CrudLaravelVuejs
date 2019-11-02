@@ -1916,14 +1916,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      query: '',
+      queryFeild: 'name',
       customers: [],
       pagination: {
         current_page: 1
       }
     };
+  },
+  watch: {
+    query: function query(newQ, old) {
+      if (newQ === '') {
+        this.getData();
+      } else {
+        // console.log(newQ) // to check saerch data
+        this.searchData();
+      }
+    }
   },
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -1943,6 +1962,21 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
 
         _this.$Progress.fail();
+      });
+    },
+    searchData: function searchData() {
+      var _this2 = this;
+
+      this.$Progress.start();
+      axios.get('/api/search/customers/' + this.queryFeild + '/' + this.query + '?page=' + this.pagination.current_page).then(function (response) {
+        _this2.customers = response.data.data;
+        _this2.pagination = response.data.meta;
+
+        _this2.$Progress.finish();
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this2.$Progress.fail();
       });
     }
   }
@@ -37345,7 +37379,89 @@ var render = function() {
             _c("div", { staticClass: "card-header" }, [_vm._v("Customers")]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
-              _vm._m(0),
+              _c("div", { staticClass: "mb-3", attrs: { action: "" } }, [
+                _c("div", { staticClass: "row" }, [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-3" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.queryFeild,
+                            expression: "queryFeild"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "feilds" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.queryFeild = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "name" } }, [
+                          _vm._v("Name")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "email" } }, [
+                          _vm._v("Email")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "phone" } }, [
+                          _vm._v("Phone")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "address" } }, [
+                          _vm._v("Address")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "total" } }, [
+                          _vm._v("Total")
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-7" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.query,
+                          expression: "query"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Search" },
+                      domProps: { value: _vm.query },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.query = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "div",
@@ -37362,24 +37478,55 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "tbody",
-                        _vm._l(_vm.customers, function(customer, index) {
-                          return _c("tr", { key: customer.id }, [
-                            _c("th", { attrs: { scope: "row" } }, [
-                              _vm._v(_vm._s(index + 1))
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(customer.name))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(customer.email))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(customer.phone))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(customer.total))]),
-                            _vm._v(" "),
-                            _vm._m(2, true)
-                          ])
-                        }),
-                        0
+                        [
+                          _vm._l(_vm.customers, function(customer, index) {
+                            return _c(
+                              "tr",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.customers.length,
+                                    expression: "customers.length"
+                                  }
+                                ],
+                                key: customer.id
+                              },
+                              [
+                                _c("th", { attrs: { scope: "row" } }, [
+                                  _vm._v(_vm._s(index + 1))
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(customer.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(customer.email))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(customer.phone))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(customer.total))]),
+                                _vm._v(" "),
+                                _vm._m(2, true)
+                              ]
+                            )
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "tr",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: !_vm.customers.length,
+                                  expression: "!customers.length"
+                                }
+                              ]
+                            },
+                            [_vm._m(3)]
+                          )
+                        ],
+                        2
                       )
                     ]
                   ),
@@ -37389,7 +37536,7 @@ var render = function() {
                         attrs: { pagination: _vm.pagination, offset: 5 },
                         on: {
                           paginate: function($event) {
-                            return _vm.getData()
+                            _vm.query === "" ? _vm.getData() : _vm.searchData()
                           }
                         }
                       })
@@ -37412,39 +37559,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("form", { staticClass: "mb-3", attrs: { action: "" } }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-2" }, [
-          _c("strong", [_vm._v("Search By : ")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-3" }, [
-          _c(
-            "select",
-            { staticClass: "form-control", attrs: { id: "feilds" } },
-            [
-              _c("option", { attrs: { value: "name" } }, [_vm._v("Name")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "email" } }, [_vm._v("Email")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "phone" } }, [_vm._v("Phone")]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "address" } }, [
-                _vm._v("Address")
-              ]),
-              _vm._v(" "),
-              _c("option", { attrs: { value: "total" } }, [_vm._v("Total")])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-7" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Search" }
-          })
-        ])
-      ])
+    return _c("div", { staticClass: "col-2 pl-5" }, [
+      _c("strong", {}, [_vm._v("Search By : ")])
     ])
   },
   function() {
@@ -37490,6 +37606,22 @@ var staticRenderFns = [
         "button",
         { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
         [_c("i", { staticClass: "fas fa-trash-alt" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { attrs: { colspan: "6" } }, [
+      _c(
+        "div",
+        { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+        [
+          _vm._v(
+            " \n                                      Sorry! No data found.\n                                    "
+          )
+        ]
       )
     ])
   }

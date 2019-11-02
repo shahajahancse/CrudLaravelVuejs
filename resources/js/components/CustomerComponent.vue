@@ -6,15 +6,15 @@
                     <div class="card-header">Customers</div>
 
                     <div class="card-body">
-                      <form action="" class="mb-3">
+                      <div action="" class="mb-3">
                         <div class="row">
 
-                          <div class="col-2">
-                            <strong>Search By : </strong>
+                          <div class="col-2 pl-5">
+                            <strong class="">Search By : </strong>
                           </div>
 
                           <div class="col-3">
-                            <select id="feilds" class="form-control">
+                            <select id="feilds" class="form-control" v-model="queryFeild">
                               <option value="name">Name</option>
                               <option value="email">Email</option>
                               <option value="phone">Phone</option>
@@ -24,11 +24,11 @@
                           </div>
 
                           <div class="col-7">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input v-model="query" type="text" class="form-control" placeholder="Search">
                           </div>
 
                         </div>
-                      </form>
+                      </div>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered table-striped">
                                 <thead>
@@ -42,7 +42,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(customer, index) in customers" :key="customer.id">
+                                    <tr v-show="customers.length" v-for="(customer, index) in customers" :key="customer.id">
                                       <th scope="row">{{ index + 1 }}</th>
                                       <td>{{ customer.name }}</td>
                                       <td>{{ customer.email }}</td>
@@ -60,12 +60,19 @@
                                         </button>
                                       </td>
                                     </tr>
+                                    <tr v-show="!customers.length">
+                                      <td colspan="6" >
+                                        <div class="alert alert-danger" role="alert"> 
+                                          Sorry! No data found.
+                                        </div>
+                                      </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <pagination v-if="pagination.last_page > 1"
                               :pagination="pagination"
                               :offset="5"
-                              @paginate="getData()"
+                              @paginate="query === '' ? getData() : searchData()"
                               ></pagination>
                         </div>
                    </div>
@@ -80,9 +87,22 @@
     export default {
       data(){
         return{
+          query: '',
+          queryFeild: 'name',
           customers: [],
           pagination:{
             current_page: 1,
+          }
+        }
+      },
+      watch:{
+        query:function (newQ, old) {
+          if (newQ === '') {
+            this.getData();
+          }
+          else{
+            // console.log(newQ) // to check saerch data
+            this.searchData()
           }
         }
       },
@@ -95,6 +115,19 @@
           this.$Progress.start()
           axios.get('/api/customers?page='+this.pagination.current_page)
           .then(response =>  {
+            this.customers = response.data.data
+            this.pagination = response.data.meta
+            this.$Progress.finish()
+          })
+          .catch(e => {
+            console.log(e)
+            this.$Progress.fail()
+          })
+        },
+        searchData(){
+          this.$Progress.start()
+          axios.get('/api/search/customers/'+this.queryFeild+'/'+this.query+'?page='+this.pagination.current_page)
+          .then(response => {
             this.customers = response.data.data
             this.pagination = response.data.meta
             this.$Progress.finish()
