@@ -1923,6 +1923,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1978,6 +1985,11 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.$Progress.fail();
       });
+    },
+    reload: function reload() {
+      this.getData();
+      this.query = '';
+      this.queryFeild = 'name';
     }
   }
 });
@@ -37376,7 +37388,39 @@ var render = function() {
       _c("div", { staticClass: "row justify-content-center" }, [
         _c("div", { staticClass: "col-md-12" }, [
           _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Customers")]),
+            _c("div", { staticClass: "card-header" }, [
+              _c(
+                "h3",
+                {
+                  staticClass: "card-title",
+                  staticStyle: { "margin-bottom": "0 !important" }
+                },
+                [_vm._v("Customers")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-tools" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    staticStyle: {
+                      position: "absolute",
+                      top: ".5rem",
+                      right: "1rem"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.reload()
+                      }
+                    }
+                  },
+                  [
+                    _vm._v("\n                      Relead "),
+                    _c("i", { staticClass: "fas fa-sync pl-1" })
+                  ]
+                )
+              ])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "mb-3", attrs: { action: "" } }, [

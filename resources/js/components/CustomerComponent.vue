@@ -3,7 +3,14 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Customers</div>
+                    <div class="card-header">
+                      <h3 class="card-title" style="margin-bottom: 0 !important">Customers</h3>
+                      <div class="card-tools">
+                        <button class="btn btn-primary" @click="reload()" style="position: absolute; top: .5rem; right: 1rem">
+                          Relead <i class="fas fa-sync pl-1"></i>
+                        </button>
+                      </div>
+                    </div>
 
                     <div class="card-body">
                       <div action="" class="mb-3">
@@ -137,6 +144,11 @@
             this.$Progress.fail()
           })
         },
+        reload(){
+          this.getData()
+          this.query = ''
+          this.queryFeild = 'name'
+        }
       }
     }
 </script>
