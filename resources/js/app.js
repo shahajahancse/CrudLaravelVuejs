@@ -10,6 +10,15 @@ require('./bootstrap');
 import PaginationComponent from './components/partial/PaginationComponent.vue'
 import Vue from 'vue'
 import VueProgressBar from 'vue-progressbar'
+import Snotify, { SnotifyPosition } from 'vue-snotify'  // 1. Import Snotify
+
+
+const SnotifyOptions = {
+  toast: {
+    position: SnotifyPosition.rightTop
+  }
+}
+Vue.use(Snotify, SnotifyOptions)
 
 const VueProgressBarOptions = {
   color: '#50d37a',
@@ -24,8 +33,8 @@ const VueProgressBarOptions = {
   location: 'top',
   inverse: false
 }
-
 Vue.use(VueProgressBar, VueProgressBarOptions)
+
 
 
 /**

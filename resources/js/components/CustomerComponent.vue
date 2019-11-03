@@ -86,6 +86,7 @@
                 </div>
             </div>
         </div>
+        <vue-snotify></vue-snotify>
         <vue-progress-bar></vue-progress-bar>
     </div>
 </template>
@@ -148,6 +149,7 @@
           this.getData()
           this.query = ''
           this.queryFeild = 'name'
+          this.$snotify.success('Data Successfully Refresh','Success')
         }
       }
     }
