@@ -10,7 +10,12 @@ require('./bootstrap');
 import PaginationComponent from './components/partial/PaginationComponent.vue'
 import Vue from 'vue'
 import VueProgressBar from 'vue-progressbar'
-import Snotify, { SnotifyPosition } from 'vue-snotify'  // 1. Import Snotify
+import Snotify, { SnotifyPosition } from 'vue-snotify'  // Import Snotify
+import { Form, HasError, AlertError } from 'vform'   // Import vform
+//  show window form
+// import Form from 'vform'                                                    
+window.Vue = require('vue');
+window.Form = Form
 
 
 const SnotifyOptions = {
@@ -50,6 +55,9 @@ Vue.use(VueProgressBar, VueProgressBarOptions)
 
 Vue.component('customer-component', require('./components/CustomerComponent.vue').default)
 Vue.component('pagination', PaginationComponent)
+// vform
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

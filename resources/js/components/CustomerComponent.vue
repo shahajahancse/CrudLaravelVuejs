@@ -5,8 +5,11 @@
                 <div class="card">
                     <div class="card-header">
                       <h3 class="card-title" style="margin-bottom: 0 !important">Customers</h3>
-                      <div class="card-tools">
-                        <button class="btn btn-primary" @click="reload()" style="position: absolute; top: .5rem; right: 1rem">
+                      <div class="card-tools" style="position: absolute; top: .5rem; right: 1rem">
+                        <button class="btn btn-info" @click="create()">
+                          Add New <i class="fas fa-user-plus pl-1 pr-0"></i>
+                        </button>
+                        <button class="btn btn-primary" @click="reload()">
                           Relead <i class="fas fa-sync pl-1"></i>
                         </button>
                       </div>
@@ -86,6 +89,60 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="customerModalLabel">Add New Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form @submit.prevent="store" @keydown="form.onKeydown($event)">
+                <div class="modal-body">
+                  <alert-error :form="form"></alert-error>
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input v-model="form.name" type="text" name="name"
+                      class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                    <has-error :form="form" field="name"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input v-model="form.email" type="email" name="email"
+                      class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                    <has-error :form="form" field="email"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label>Phone</label>
+                    <input v-model="form.phone" type="tel" name="phone"
+                      class="form-control" :class="{ 'is-invalid': form.errors.has('phone') }">
+                    <has-error :form="form" field="phone"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label>Address</label>
+                    <input v-model="form.address" type="text" name="address"
+                      class="form-control" :class="{ 'is-invalid': form.errors.has('address') }">
+                    <has-error :form="form" field="address"></has-error>
+                  </div>
+                  <div class="form-group">
+                    <label>Total</label>
+                    <input v-model="form.total" type="number" name="total"
+                      class="form-control" :class="{ 'is-invalid': form.errors.has('total') }">
+                    <has-error :form="form" field="total"></has-error>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button :disabled="form.busy" type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
         <vue-snotify></vue-snotify>
         <vue-progress-bar></vue-progress-bar>
     </div>
@@ -98,6 +155,14 @@
           query: '',
           queryFeild: 'name',
           customers: [],
+          form : new Form({
+            id : '',
+            name: '',
+            email: '',
+            phone: '',
+            address: '',
+            total: '',
+          }),
           pagination:{
             current_page: 1,
           }
@@ -150,6 +215,12 @@
           this.query = ''
           this.queryFeild = 'name'
           this.$snotify.success('Data Successfully Refresh','Success')
+        },
+        create(){
+          $('#customerModal').modal('show')
+        },
+        store(){
+          console.log('hello')
         }
       }
     }
