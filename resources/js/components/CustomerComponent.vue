@@ -7,7 +7,7 @@
                       <h3 class="card-title" style="margin-bottom: 0 !important">Customers</h3>
                       <div class="card-tools" style="position: absolute; top: .5rem; right: 1rem">
                         <button class="btn btn-info" @click="create()">
-                          Add New <i class="fas fa-user-plus pl-1 pr-0"></i>
+                          Add New <i class="text-light fas fa-user-plus pl-1 pr-0"></i>
                         </button>
                         <button class="btn btn-primary" @click="reload()">
                           Relead <i class="fas fa-sync pl-1"></i>
@@ -105,39 +105,34 @@
                   <alert-error :form="form"></alert-error>
                   <div class="form-group">
                     <label>Name</label>
-                    <input v-model="form.name" type="text" name="name"
-                      class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                    <input v-model="form.name" type="text" name="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                     <has-error :form="form" field="name"></has-error>
                   </div>
                   <div class="form-group">
                     <label>Email</label>
-                    <input v-model="form.email" type="email" name="email"
-                      class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                    <input v-model="form.email" type="email" name="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                     <has-error :form="form" field="email"></has-error>
                   </div>
                   <div class="form-group">
                     <label>Phone</label>
-                    <input v-model="form.phone" type="tel" name="phone"
-                      class="form-control" :class="{ 'is-invalid': form.errors.has('phone') }">
+                    <input v-model="form.phone" type="tel" name="phone" class="form-control" :class="{ 'is-invalid': form.errors.has('phone') }">
                     <has-error :form="form" field="phone"></has-error>
                   </div>
                   <div class="form-group">
                     <label>Address</label>
-                    <input v-model="form.address" type="text" name="address"
-                      class="form-control" :class="{ 'is-invalid': form.errors.has('address') }">
+                    <textarea v-model="form.address" name="address" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }"></textarea>
                     <has-error :form="form" field="address"></has-error>
                   </div>
                   <div class="form-group">
                     <label>Total</label>
-                    <input v-model="form.total" type="number" name="total"
-                      class="form-control" :class="{ 'is-invalid': form.errors.has('total') }">
+                    <input v-model="form.total" type="number" name="total" class="form-control" :class="{ 'is-invalid': form.errors.has('total') }">
                     <has-error :form="form" field="total"></has-error>
                   </div>
 
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button :disabled="form.busy" type="submit" class="btn btn-primary">Save changes</button>
+                  <button :disabled="form.busy" type="submit" class="btn btn-primary">Saved</button>
                 </div>
               </form>
             </div>
@@ -169,18 +164,20 @@
         }
       },
       watch:{
-        query:function (newQ, old) {
-          if (newQ === '') {
+        query:function (newQ, old) 
+        {
+          if (newQ === '') 
+          {
             this.getData();
           }
-          else{
+          else
+          {
             // console.log(newQ) // to check saerch data
             this.searchData()
           }
         }
       },
       mounted() {
-          console.log('Component mounted.')
           this.getData();
       },
       methods: {
@@ -217,10 +214,32 @@
           this.$snotify.success('Data Successfully Refresh','Success')
         },
         create(){
+          this.form.reset()
+          this.form.clear()
           $('#customerModal').modal('show')
         },
         store(){
-          console.log('hello')
+          this.$Progress.start()
+          this.form.busy = true
+          this.form.post('/api/customers')
+          .then(response => {
+            this.getData()
+            $('#customerModal').modal('hide')
+            if (this.form.successful) 
+            {
+              this.$Progress.finish()
+              this.$snotify.success('Customer successfully saved', 'Success')
+            }
+            else
+            {
+              this.$Progress.fail()
+              this.$snotify.error('Ops! something went wrong try again leter', 'Error')
+            }
+          })
+          .catch(e => {
+            this.$Progress.fail()
+            console.log(e)
+          })
         }
       }
     }

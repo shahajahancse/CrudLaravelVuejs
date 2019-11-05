@@ -1983,11 +1983,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2018,7 +2013,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
     this.getData();
   },
   methods: {
@@ -2059,10 +2053,34 @@ __webpack_require__.r(__webpack_exports__);
       this.$snotify.success('Data Successfully Refresh', 'Success');
     },
     create: function create() {
+      this.form.reset();
+      this.form.clear();
       $('#customerModal').modal('show');
     },
     store: function store() {
-      console.log('hello');
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.form.busy = true;
+      this.form.post('/api/customers').then(function (response) {
+        _this3.getData();
+
+        $('#customerModal').modal('hide');
+
+        if (_this3.form.successful) {
+          _this3.$Progress.finish();
+
+          _this3.$snotify.success('Customer successfully saved', 'Success');
+        } else {
+          _this3.$Progress.fail();
+
+          _this3.$snotify.error('Ops! something went wrong try again leter', 'Error');
+        }
+      })["catch"](function (e) {
+        _this3.$Progress.fail();
+
+        console.log(e);
+      });
     }
   }
 });
@@ -38516,7 +38534,9 @@ var render = function() {
                     },
                     [
                       _vm._v("\n                      Add New "),
-                      _c("i", { staticClass: "fas fa-user-plus pl-1 pr-0" })
+                      _c("i", {
+                        staticClass: "text-light fas fa-user-plus pl-1 pr-0"
+                      })
                     ]
                   ),
                   _vm._v(" "),
@@ -38882,7 +38902,7 @@ var render = function() {
                           [
                             _c("label", [_vm._v("Address")]),
                             _vm._v(" "),
-                            _c("input", {
+                            _c("textarea", {
                               directives: [
                                 {
                                   name: "model",
@@ -38895,7 +38915,7 @@ var render = function() {
                               class: {
                                 "is-invalid": _vm.form.errors.has("address")
                               },
-                              attrs: { type: "text", name: "address" },
+                              attrs: { name: "address" },
                               domProps: { value: _vm.form.address },
                               on: {
                                 input: function($event) {
@@ -38979,7 +38999,7 @@ var render = function() {
                           staticClass: "btn btn-primary",
                           attrs: { disabled: _vm.form.busy, type: "submit" }
                         },
-                        [_vm._v("Save changes")]
+                        [_vm._v("Saved")]
                       )
                     ])
                   ]
