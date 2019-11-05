@@ -21,6 +21,7 @@ class CustomerCollection extends ResourceCollection
                     'name' => $customer->name,
                     'email' => $customer->email,
                     'phone' => $customer->phone,
+                    "address" => $customer->address,
                     'total' => $customer->total,
                 ];
             })

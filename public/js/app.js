@@ -1986,6 +1986,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      editMode: false,
       query: '',
       queryFeild: 'name',
       customers: [],
@@ -2052,11 +2053,16 @@ __webpack_require__.r(__webpack_exports__);
       this.queryFeild = 'name';
       this.$snotify.success('Data Successfully Refresh', 'Success');
     },
+    // show form to insert/update data
     create: function create() {
-      this.form.reset();
-      this.form.clear();
+      this.editMode = false;
+      this.form.reset(); // reset form  
+
+      this.form.clear(); // clear error
+
       $('#customerModal').modal('show');
     },
+    // data insert
     store: function store() {
       var _this3 = this;
 
@@ -2078,6 +2084,43 @@ __webpack_require__.r(__webpack_exports__);
         }
       })["catch"](function (e) {
         _this3.$Progress.fail();
+
+        console.log(e);
+      });
+    },
+    // data update
+    edit: function edit(customer) {
+      console.log(customer);
+      this.editMode = true;
+      this.form.reset(); // reset form
+
+      this.form.clear(); // clear error
+
+      this.form.fill(customer); // show specific data
+
+      $('#customerModal').modal('show'); // show form
+    },
+    update: function update() {
+      var _this4 = this;
+
+      this.$Progress.start();
+      this.form.busy = true;
+      this.form.put('/api/customers/' + this.form.id).then(function (response) {
+        _this4.getData();
+
+        $('#customerModal').modal('hide');
+
+        if (_this4.form.successful) {
+          _this4.$Progress.finish();
+
+          _this4.$snotify.success('Customer successfully updated', 'Success');
+        } else {
+          _this4.$Progress.fail();
+
+          _this4.$snotify.error('Ops! something went wrong try again leter', 'Error');
+        }
+      })["catch"](function (e) {
+        _this4.$Progress.fail();
 
         console.log(e);
       });
@@ -38533,7 +38576,7 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v("\n                      Add New "),
+                      _vm._v("\n              Add New "),
                       _c("i", {
                         staticClass: "text-light fas fa-user-plus pl-1 pr-0"
                       })
@@ -38551,7 +38594,7 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._v("\n                      Relead "),
+                      _vm._v("\n              Relead "),
                       _c("i", { staticClass: "fas fa-sync pl-1" })
                     ]
                   )
@@ -38687,7 +38730,25 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("td", [_vm._v(_vm._s(customer.total))]),
                                 _vm._v(" "),
-                                _vm._m(2, true)
+                                _c("td", { staticClass: "text-center" }, [
+                                  _vm._m(2, true),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-primary btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.edit(customer)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "fas fa-edit" })]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._m(3, true)
+                                ])
                               ]
                             )
                           }),
@@ -38704,7 +38765,7 @@ var render = function() {
                                 }
                               ]
                             },
-                            [_vm._m(3)]
+                            [_vm._m(4)]
                           )
                         ],
                         2
@@ -38748,7 +38809,22 @@ var render = function() {
             { staticClass: "modal-dialog", attrs: { role: "document" } },
             [
               _c("div", { staticClass: "modal-content" }, [
-                _vm._m(4),
+                _c("div", { staticClass: "modal-header" }, [
+                  _c(
+                    "h5",
+                    {
+                      staticClass: "modal-title",
+                      attrs: { id: "customerModalLabel" }
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(_vm.editMode ? "Edit" : "Add New") + " Customer"
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._m(5)
+                ]),
                 _vm._v(" "),
                 _c(
                   "form",
@@ -38756,7 +38832,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.store($event)
+                        _vm.editMode ? _vm.update() : _vm.store()
                       },
                       keydown: function($event) {
                         return _vm.form.onKeydown($event)
@@ -39052,25 +39128,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-info btn-sm", attrs: { type: "button" } },
-        [_c("i", { staticClass: "fas fa-eye" })]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary btn-sm", attrs: { type: "button" } },
-        [_c("i", { staticClass: "fas fa-edit" })]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
-        [_c("i", { staticClass: "fas fa-trash-alt" })]
-      )
-    ])
+    return _c(
+      "button",
+      { staticClass: "btn btn-info btn-sm", attrs: { type: "button" } },
+      [_c("i", { staticClass: "fas fa-eye" })]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
+      [_c("i", { staticClass: "fas fa-trash-alt" })]
+    )
   },
   function() {
     var _vm = this
@@ -39082,7 +39154,7 @@ var staticRenderFns = [
         { staticClass: "alert alert-danger", attrs: { role: "alert" } },
         [
           _vm._v(
-            " \n                                      Sorry! No data found.\n                                    "
+            " \n                              Sorry! No data found.\n                            "
           )
         ]
       )
@@ -39092,26 +39164,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "customerModalLabel" } },
-        [_vm._v("Add New Customer")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
@@ -53004,14 +53068,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!*******************************************************!*\
   !*** ./resources/js/components/CustomerComponent.vue ***!
   \*******************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CustomerComponent_vue_vue_type_template_id_9097e738___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomerComponent.vue?vue&type=template&id=9097e738& */ "./resources/js/components/CustomerComponent.vue?vue&type=template&id=9097e738&");
 /* harmony import */ var _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomerComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/CustomerComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -53041,7 +53106,7 @@ component.options.__file = "resources/js/components/CustomerComponent.vue"
 /*!********************************************************************************!*\
   !*** ./resources/js/components/CustomerComponent.vue?vue&type=script&lang=js& ***!
   \********************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
