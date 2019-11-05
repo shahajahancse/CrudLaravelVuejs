@@ -2124,6 +2124,46 @@ __webpack_require__.r(__webpack_exports__);
 
         console.log(e);
       });
+    },
+    // data updated end
+    // delete data here
+    destroy: function destroy(customer) {
+      var _this5 = this;
+
+      this.$snotify.clear();
+      this.$snotify.confirm("You will not be able to recover this data!", "Are you sure", {
+        showProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        buttons: [{
+          text: 'Yes',
+          action: function action(toast) {
+            _this5.$snotify.remove(toast.id); // console.log(customer) 
+
+
+            _this5.$Progress.start();
+
+            axios["delete"]('/api/customers/' + customer.id).then(function (response) {
+              _this5.getData();
+
+              _this5.$Progress.finish();
+
+              _this5.$snotify.success('Customer successfully deleted', 'Success');
+            })["catch"](function (e) {
+              _this5.$Progress.fail();
+
+              console.log(e);
+            });
+          },
+          bold: true
+        }, {
+          text: 'No',
+          action: function action(toast) {
+            _this5.$snotify.remove(toast.id);
+          },
+          bold: true
+        }]
+      });
     }
   }
 });
@@ -38747,7 +38787,23 @@ var render = function() {
                                     [_c("i", { staticClass: "fas fa-edit" })]
                                   ),
                                   _vm._v(" "),
-                                  _vm._m(3, true)
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-danger btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.destroy(customer)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fas fa-trash-alt"
+                                      })
+                                    ]
+                                  )
                                 ])
                               ]
                             )
@@ -38765,7 +38821,7 @@ var render = function() {
                                 }
                               ]
                             },
-                            [_vm._m(4)]
+                            [_vm._m(3)]
                           )
                         ],
                         2
@@ -38823,7 +38879,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(5)
+                  _vm._m(4)
                 ]),
                 _vm._v(" "),
                 _c(
@@ -39132,16 +39188,6 @@ var staticRenderFns = [
       "button",
       { staticClass: "btn btn-info btn-sm", attrs: { type: "button" } },
       [_c("i", { staticClass: "fas fa-eye" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
-      [_c("i", { staticClass: "fas fa-trash-alt" })]
     )
   },
   function() {
