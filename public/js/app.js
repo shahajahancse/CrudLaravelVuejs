@@ -1983,6 +1983,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1990,6 +2017,7 @@ __webpack_require__.r(__webpack_exports__);
       query: '',
       queryFeild: 'name',
       customers: [],
+      profile: [],
       form: new Form({
         id: '',
         name: '',
@@ -2032,19 +2060,36 @@ __webpack_require__.r(__webpack_exports__);
         _this.$Progress.fail();
       });
     },
-    searchData: function searchData() {
+    // show single data
+    singleData: function singleData(customer) {
       var _this2 = this;
 
       this.$Progress.start();
-      axios.get('/api/search/customers/' + this.queryFeild + '/' + this.query + '?page=' + this.pagination.current_page).then(function (response) {
-        _this2.customers = response.data.data;
-        _this2.pagination = response.data.meta;
+      axios.get('/api/customers/' + customer.id).then(function (response) {
+        _this2.profile = response.data.data; // console.log(response.data.data)
+
+        $('#singleModal').modal('show');
 
         _this2.$Progress.finish();
       })["catch"](function (e) {
         console.log(e);
 
         _this2.$Progress.fail();
+      });
+    },
+    searchData: function searchData() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      axios.get('/api/search/customers/' + this.queryFeild + '/' + this.query + '?page=' + this.pagination.current_page).then(function (response) {
+        _this3.customers = response.data.data;
+        _this3.pagination = response.data.meta;
+
+        _this3.$Progress.finish();
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this3.$Progress.fail();
       });
     },
     reload: function reload() {
@@ -2064,26 +2109,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     // data insert
     store: function store() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$Progress.start();
       this.form.busy = true;
       this.form.post('/api/customers').then(function (response) {
-        _this3.getData();
+        _this4.getData();
 
         $('#customerModal').modal('hide');
 
-        if (_this3.form.successful) {
-          _this3.$Progress.finish();
+        if (_this4.form.successful) {
+          _this4.$Progress.finish();
 
-          _this3.$snotify.success('Customer successfully saved', 'Success');
+          _this4.$snotify.success('Customer successfully saved', 'Success');
         } else {
-          _this3.$Progress.fail();
+          _this4.$Progress.fail();
 
-          _this3.$snotify.error('Ops! something went wrong try again leter', 'Error');
+          _this4.$snotify.error('Ops! something went wrong try again leter', 'Error');
         }
       })["catch"](function (e) {
-        _this3.$Progress.fail();
+        _this4.$Progress.fail();
 
         console.log(e);
       });
@@ -2101,26 +2146,26 @@ __webpack_require__.r(__webpack_exports__);
       $('#customerModal').modal('show'); // show form
     },
     update: function update() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$Progress.start();
       this.form.busy = true;
       this.form.put('/api/customers/' + this.form.id).then(function (response) {
-        _this4.getData();
+        _this5.getData();
 
         $('#customerModal').modal('hide');
 
-        if (_this4.form.successful) {
-          _this4.$Progress.finish();
+        if (_this5.form.successful) {
+          _this5.$Progress.finish();
 
-          _this4.$snotify.success('Customer successfully updated', 'Success');
+          _this5.$snotify.success('Customer successfully updated', 'Success');
         } else {
-          _this4.$Progress.fail();
+          _this5.$Progress.fail();
 
-          _this4.$snotify.error('Ops! something went wrong try again leter', 'Error');
+          _this5.$snotify.error('Ops! something went wrong try again leter', 'Error');
         }
       })["catch"](function (e) {
-        _this4.$Progress.fail();
+        _this5.$Progress.fail();
 
         console.log(e);
       });
@@ -2128,7 +2173,7 @@ __webpack_require__.r(__webpack_exports__);
     // data updated end
     // delete data here
     destroy: function destroy(customer) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.$snotify.clear();
       this.$snotify.confirm("You will not be able to recover this data!", "Are you sure", {
@@ -2138,19 +2183,19 @@ __webpack_require__.r(__webpack_exports__);
         buttons: [{
           text: 'Yes',
           action: function action(toast) {
-            _this5.$snotify.remove(toast.id); // console.log(customer) 
+            _this6.$snotify.remove(toast.id); // console.log(customer) 
 
 
-            _this5.$Progress.start();
+            _this6.$Progress.start();
 
             axios["delete"]('/api/customers/' + customer.id).then(function (response) {
-              _this5.getData();
+              _this6.getData();
 
-              _this5.$Progress.finish();
+              _this6.$Progress.finish();
 
-              _this5.$snotify.success('Customer successfully deleted', 'Success');
+              _this6.$snotify.success('Customer successfully deleted', 'Success');
             })["catch"](function (e) {
-              _this5.$Progress.fail();
+              _this6.$Progress.fail();
 
               console.log(e);
             });
@@ -2159,7 +2204,7 @@ __webpack_require__.r(__webpack_exports__);
         }, {
           text: 'No',
           action: function action(toast) {
-            _this5.$snotify.remove(toast.id);
+            _this6.$snotify.remove(toast.id);
           },
           bold: true
         }]
@@ -38771,7 +38816,19 @@ var render = function() {
                                 _c("td", [_vm._v(_vm._s(customer.total))]),
                                 _vm._v(" "),
                                 _c("td", { staticClass: "text-center" }, [
-                                  _vm._m(2, true),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.singleData(customer)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "fas fa-eye" })]
+                                  ),
                                   _vm._v(" "),
                                   _c(
                                     "button",
@@ -38821,7 +38878,7 @@ var render = function() {
                                 }
                               ]
                             },
-                            [_vm._m(3)]
+                            [_vm._m(2)]
                           )
                         ],
                         2
@@ -38879,7 +38936,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(4)
+                  _vm._m(3)
                 ]),
                 _vm._v(" "),
                 _c(
@@ -39142,6 +39199,55 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "singleModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "singleModaling",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "modal-dialog", attrs: { role: "document" } },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(4),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("h4", { staticClass: "p-1" }, [
+                    _vm._v("Name: " + _vm._s(_vm.profile.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "p-1" }, [
+                    _vm._v("Email: " + _vm._s(_vm.profile.email))
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "p-1" }, [
+                    _vm._v("Phone: " + _vm._s(_vm.profile.mobile))
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "p-1" }, [
+                    _vm._v("Address: " + _vm._s(_vm.profile.address))
+                  ]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "p-1" }, [
+                    _vm._v("Total: " + _vm._s(_vm.profile.total))
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(5)
+              ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c("vue-snotify"),
       _vm._v(" "),
       _c("vue-progress-bar")
@@ -39184,16 +39290,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-info btn-sm", attrs: { type: "button" } },
-      [_c("i", { staticClass: "fas fa-eye" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("td", { attrs: { colspan: "6" } }, [
       _c(
         "div",
@@ -39222,6 +39318,52 @@ var staticRenderFns = [
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "singleModaling" } },
+        [_vm._v("Customer Profile")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "button" } },
+        [_vm._v("Save changes")]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -53114,15 +53256,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!*******************************************************!*\
   !*** ./resources/js/components/CustomerComponent.vue ***!
   \*******************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CustomerComponent_vue_vue_type_template_id_9097e738___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CustomerComponent.vue?vue&type=template&id=9097e738& */ "./resources/js/components/CustomerComponent.vue?vue&type=template&id=9097e738&");
 /* harmony import */ var _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CustomerComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/CustomerComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CustomerComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -53152,7 +53293,7 @@ component.options.__file = "resources/js/components/CustomerComponent.vue"
 /*!********************************************************************************!*\
   !*** ./resources/js/components/CustomerComponent.vue?vue&type=script&lang=js& ***!
   \********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

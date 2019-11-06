@@ -59,7 +59,7 @@
                             <td>{{ customer.phone }}</td>
                             <td>{{ customer.total }}</td>
                             <td class="text-center">
-                              <button type="button" class="btn btn-info btn-sm">
+                              <button type="button" class="btn btn-info btn-sm" @click="singleData(customer)">
                                 <i class="fas fa-eye"></i>
                               </button>
                               <button type="button" class="btn btn-primary btn-sm" @click="edit(customer)">
@@ -138,6 +138,33 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Modal to single profile view -->
+    <div class="modal fade" id="singleModal" tabindex="-1" role="dialog" aria-labelledby="singleModaling" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="singleModaling">Customer Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h4 class="p-1">Name: {{profile.name}}</h4>
+            <h4 class="p-1">Email: {{profile.email}}</h4>
+            <h4 class="p-1">Phone: {{profile.mobile}}</h4>
+            <h4 class="p-1">Address: {{profile.address}}</h4>
+            <h4 class="p-1">Total: {{profile.total}}</h4>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <vue-snotify></vue-snotify>
     <vue-progress-bar></vue-progress-bar>
   </div>
@@ -145,12 +172,13 @@
 
 <script>
     export default {
-      data(){
+       data(){
         return{
           editMode : false,
           query: '',
           queryFeild: 'name',
           customers: [],
+          profile: [],
           form : new Form({
             id : '',
             name: '',
@@ -188,6 +216,21 @@
           .then(response =>  {
             this.customers = response.data.data
             this.pagination = response.data.meta
+            this.$Progress.finish()
+          })
+          .catch(e => {
+            console.log(e)
+            this.$Progress.fail()
+          })
+        },
+        // show single data
+        singleData(customer){  
+          this.$Progress.start()
+          axios.get('/api/customers/' + customer.id)
+          .then(response =>  {
+            this.profile = response.data.data
+            // console.log(response.data.data)
+            $('#singleModal').modal('show')
             this.$Progress.finish()
           })
           .catch(e => {
